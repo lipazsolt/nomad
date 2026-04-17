@@ -1402,7 +1402,7 @@ func (a *AllocDeploymentStatus) Copy() *AllocDeploymentStatus {
 	*c = *a
 
 	if a.Healthy != nil {
-		c.Healthy = pointer.Of(*a.Healthy)
+		c.Healthy = new(*a.Healthy)
 	}
 
 	return c

@@ -43,7 +43,6 @@ import (
 	"github.com/hashicorp/nomad/drivers/shared/hostnames"
 	"github.com/hashicorp/nomad/drivers/shared/resolvconf"
 	"github.com/hashicorp/nomad/helper"
-	"github.com/hashicorp/nomad/helper/pointer"
 	nstructs "github.com/hashicorp/nomad/nomad/structs"
 	"github.com/hashicorp/nomad/plugins/base"
 	"github.com/hashicorp/nomad/plugins/drivers"
@@ -1131,7 +1130,7 @@ func (d *Driver) createContainerConfig(task *drivers.TaskConfig, driverConfig *T
 
 		// disable swap explicitly in non-Windows environments
 		if cgroupslib.MaybeDisableMemorySwappiness() != nil {
-			hostConfig.MemorySwappiness = pointer.Of(int64(*(cgroupslib.MaybeDisableMemorySwappiness())))
+			hostConfig.MemorySwappiness = new(int64(*(cgroupslib.MaybeDisableMemorySwappiness())))
 		} else {
 			hostConfig.MemorySwappiness = nil
 		}
@@ -1700,7 +1699,7 @@ func (d *Driver) DestroyTask(taskID string, force bool) error {
 			if !force {
 				return fmt.Errorf("must call StopTask for the given task before Destroy or set force to true")
 			}
-			if err := dockerClient.ContainerStop(d.ctx, h.containerID, containerapi.StopOptions{Timeout: pointer.Of(0)}); err != nil {
+			if err := dockerClient.ContainerStop(d.ctx, h.containerID, containerapi.StopOptions{Timeout: new(0)}); err != nil {
 				h.logger.Warn("failed to stop container during destroy", "error", err)
 			}
 		}
@@ -2059,5 +2058,5 @@ func isDockerTransientError(err error) bool {
 }
 
 func stopWithZeroTimeout() containerapi.StopOptions {
-	return containerapi.StopOptions{Timeout: pointer.Of(0)}
+	return containerapi.StopOptions{Timeout: new(0)}
 }

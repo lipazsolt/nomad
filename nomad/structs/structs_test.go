@@ -18,7 +18,6 @@ import (
 	"github.com/hashicorp/nomad/ci"
 	"github.com/hashicorp/nomad/client/lib/idset"
 	"github.com/hashicorp/nomad/client/lib/numalib/hw"
-	"github.com/hashicorp/nomad/helper/pointer"
 	"github.com/hashicorp/nomad/helper/uuid"
 	psstructs "github.com/hashicorp/nomad/plugins/shared/structs"
 	"github.com/kr/pretty"
@@ -3454,15 +3453,15 @@ func TestTemplate_Copy(t *testing.T) {
 		},
 		Splay:      10 * time.Second,
 		Perms:      "777",
-		Uid:        pointer.Of(1000),
-		Gid:        pointer.Of(2000),
+		Uid:        new(1000),
+		Gid:        new(2000),
 		LeftDelim:  "[[",
 		RightDelim: "]]",
 		Envvars:    true,
 		VaultGrace: time.Minute,
 		Wait: &WaitConfig{
-			Min: pointer.Of(time.Second),
-			Max: pointer.Of(time.Minute),
+			Min: new(time.Second),
+			Max: new(time.Minute),
 		},
 	}
 	t2 := t1.Copy()
@@ -3475,14 +3474,14 @@ func TestTemplate_Copy(t *testing.T) {
 	t1.ChangeScript.Args = []string{"--forces", "--debugs"}
 	t1.Splay = 5 * time.Second
 	t1.Perms = "700"
-	t1.Uid = pointer.Of(5000)
-	t1.Gid = pointer.Of(6000)
+	t1.Uid = new(5000)
+	t1.Gid = new(6000)
 	t1.LeftDelim = "(("
 	t1.RightDelim = "))"
 	t1.Envvars = false
 	t1.VaultGrace = 2 * time.Minute
-	t1.Wait.Min = pointer.Of(2 * time.Second)
-	t1.Wait.Max = pointer.Of(2 * time.Minute)
+	t1.Wait.Min = new(2 * time.Second)
+	t1.Wait.Max = new(2 * time.Minute)
 
 	require.NotEqual(t, t1.SourcePath, t2.SourcePath)
 	require.NotEqual(t, t1.DestPath, t2.DestPath)
@@ -3593,8 +3592,8 @@ func TestTemplate_Validate(t *testing.T) {
 				DestPath:   "local/foo",
 				ChangeMode: "noop",
 				Wait: &WaitConfig{
-					Min: pointer.Of(10 * time.Second),
-					Max: pointer.Of(5 * time.Second),
+					Min: new(10 * time.Second),
+					Max: new(5 * time.Second),
 				},
 			},
 			Fail: true,
@@ -3608,8 +3607,8 @@ func TestTemplate_Validate(t *testing.T) {
 				DestPath:   "local/foo",
 				ChangeMode: "noop",
 				Wait: &WaitConfig{
-					Min: pointer.Of(5 * time.Second),
-					Max: pointer.Of(5 * time.Second),
+					Min: new(5 * time.Second),
+					Max: new(5 * time.Second),
 				},
 			},
 			Fail: false,
@@ -3620,8 +3619,8 @@ func TestTemplate_Validate(t *testing.T) {
 				DestPath:   "local/foo",
 				ChangeMode: "noop",
 				Wait: &WaitConfig{
-					Min: pointer.Of(5 * time.Second),
-					Max: pointer.Of(10 * time.Second),
+					Min: new(5 * time.Second),
+					Max: new(10 * time.Second),
 				},
 			},
 			Fail: false,
@@ -3686,12 +3685,12 @@ func TestTaskWaitConfig_Equals(t *testing.T) {
 		{
 			name: "all-fields",
 			wc1: &WaitConfig{
-				Min: pointer.Of(5 * time.Second),
-				Max: pointer.Of(10 * time.Second),
+				Min: new(5 * time.Second),
+				Max: new(10 * time.Second),
 			},
 			wc2: &WaitConfig{
-				Min: pointer.Of(5 * time.Second),
-				Max: pointer.Of(10 * time.Second),
+				Min: new(5 * time.Second),
+				Max: new(10 * time.Second),
 			},
 			exp: true,
 		},
@@ -3704,27 +3703,27 @@ func TestTaskWaitConfig_Equals(t *testing.T) {
 		{
 			name: "min-only",
 			wc1: &WaitConfig{
-				Min: pointer.Of(5 * time.Second),
+				Min: new(5 * time.Second),
 			},
 			wc2: &WaitConfig{
-				Min: pointer.Of(5 * time.Second),
+				Min: new(5 * time.Second),
 			},
 			exp: true,
 		},
 		{
 			name: "max-only",
 			wc1: &WaitConfig{
-				Max: pointer.Of(10 * time.Second),
+				Max: new(10 * time.Second),
 			},
 			wc2: &WaitConfig{
-				Max: pointer.Of(10 * time.Second),
+				Max: new(10 * time.Second),
 			},
 			exp: true,
 		},
 		{
 			name: "min-nil-vs-set",
 			wc1: &WaitConfig{
-				Min: pointer.Of(1 * time.Second),
+				Min: new(1 * time.Second),
 			},
 			wc2: &WaitConfig{
 				Min: nil,
@@ -3734,7 +3733,7 @@ func TestTaskWaitConfig_Equals(t *testing.T) {
 		{
 			name: "max-nil-vs-set",
 			wc1: &WaitConfig{
-				Max: pointer.Of(1 * time.Second),
+				Max: new(1 * time.Second),
 			},
 			wc2: &WaitConfig{
 				Max: nil,
@@ -6616,7 +6615,7 @@ func TestDevicesEquals(t *testing.T) {
 				},
 			}},
 			Attributes: map[string]*psstructs.Attribute{
-				"test-attr": {String: pointer.Of("test-value")},
+				"test-attr": {String: new("test-value")},
 			},
 		}},
 	}
@@ -6671,7 +6670,7 @@ func TestDevicesEquals(t *testing.T) {
 			name: "diff attribute",
 			change: func(r *NodeResources) {
 				r.Devices[0].Attributes["test-attr"] = &psstructs.Attribute{
-					String: pointer.Of("another-value"),
+					String: new("another-value"),
 				}
 			},
 		},
@@ -7276,14 +7275,14 @@ func TestWaitConfig_Equal(t *testing.T) {
 	must.NotEqual[*WaitConfig](t, nil, new(WaitConfig))
 
 	must.StructEqual(t, &WaitConfig{
-		Min: pointer.Of[time.Duration](100),
-		Max: pointer.Of[time.Duration](200),
+		Min: new(time.Duration(100)),
+		Max: new(time.Duration(200)),
 	}, []must.Tweak[*WaitConfig]{{
 		Field: "Min",
-		Apply: func(c *WaitConfig) { c.Min = pointer.Of[time.Duration](111) },
+		Apply: func(c *WaitConfig) { c.Min = new(time.Duration(111)) },
 	}, {
 		Field: "Max",
-		Apply: func(c *WaitConfig) { c.Max = pointer.Of[time.Duration](222) },
+		Apply: func(c *WaitConfig) { c.Max = new(time.Duration(222)) },
 	}})
 }
 
@@ -7371,15 +7370,15 @@ func TestTemplate_Equal(t *testing.T) {
 		},
 		Splay:      1,
 		Perms:      "perms",
-		Uid:        pointer.Of(1000),
-		Gid:        pointer.Of(1000),
+		Uid:        new(1000),
+		Gid:        new(1000),
 		LeftDelim:  "{",
 		RightDelim: "}",
 		Envvars:    true,
 		VaultGrace: 1 * time.Second,
 		Wait: &WaitConfig{
-			Min: pointer.Of[time.Duration](1),
-			Max: pointer.Of[time.Duration](2),
+			Min: new(time.Duration(1)),
+			Max: new(time.Duration(2)),
 		},
 		ErrMissingKey: true,
 	}, []must.Tweak[*Template]{{
@@ -7415,10 +7414,10 @@ func TestTemplate_Equal(t *testing.T) {
 		Apply: func(t *Template) { t.Perms = "perms2" },
 	}, {
 		Field: "Uid",
-		Apply: func(t *Template) { t.Uid = pointer.Of(0) },
+		Apply: func(t *Template) { t.Uid = new(0) },
 	}, {
 		Field: "Gid",
-		Apply: func(t *Template) { t.Gid = pointer.Of(0) },
+		Apply: func(t *Template) { t.Gid = new(0) },
 	}, {
 		Field: "LeftDelim",
 		Apply: func(t *Template) { t.LeftDelim = "[" },
@@ -7435,7 +7434,7 @@ func TestTemplate_Equal(t *testing.T) {
 		Field: "Wait",
 		Apply: func(t *Template) {
 			t.Wait = &WaitConfig{
-				Min: pointer.Of[time.Duration](1),
+				Min: new(time.Duration(1)),
 				Max: nil,
 			}
 		},

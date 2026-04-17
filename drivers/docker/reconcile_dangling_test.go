@@ -20,7 +20,6 @@ import (
 
 	"github.com/hashicorp/nomad/ci"
 	"github.com/hashicorp/nomad/client/testutil"
-	"github.com/hashicorp/nomad/helper/pointer"
 	"github.com/hashicorp/nomad/helper/uuid"
 	"github.com/hashicorp/nomad/plugins/drivers"
 )
@@ -229,7 +228,7 @@ func TestDanglingContainerRemoval_Stopped(t *testing.T) {
 	err = dockerClient.ContainerStart(ctx, cont.ID, container.StartOptions{})
 	must.NoError(t, err)
 
-	err = dockerClient.ContainerStop(ctx, cont.ID, container.StopOptions{Timeout: pointer.Of(60)})
+	err = dockerClient.ContainerStop(ctx, cont.ID, container.StopOptions{Timeout: new(60)})
 	must.NoError(t, err)
 
 	dd := dockerDriverHarness(t, nil).Impl().(*Driver)

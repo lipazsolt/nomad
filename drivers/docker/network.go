@@ -8,7 +8,6 @@ import (
 
 	"github.com/docker/docker/api/types"
 	containerapi "github.com/docker/docker/api/types/container"
-	"github.com/hashicorp/nomad/helper/pointer"
 	"github.com/hashicorp/nomad/plugins/drivers"
 )
 
@@ -128,7 +127,7 @@ func (d *Driver) DestroyNetwork(allocID string, spec *drivers.NetworkIsolationSp
 	}
 
 	// this is the pause container, just kill it fast
-	if err := dockerClient.ContainerStop(d.ctx, id, containerapi.StopOptions{Timeout: pointer.Of(1)}); err != nil {
+	if err := dockerClient.ContainerStop(d.ctx, id, containerapi.StopOptions{Timeout: new(1)}); err != nil {
 		d.logger.Warn("failed to stop pause container", "id", id, "error", err)
 	}
 
