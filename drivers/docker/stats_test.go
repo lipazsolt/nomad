@@ -10,12 +10,12 @@ import (
 	"testing"
 	"time"
 
-	containerapi "github.com/docker/docker/api/types/container"
 	"github.com/hashicorp/nomad/ci"
 	"github.com/hashicorp/nomad/client/lib/cpustats"
 	cstructs "github.com/hashicorp/nomad/client/structs"
 	"github.com/hashicorp/nomad/client/testutil"
 	"github.com/hashicorp/nomad/drivers/docker/util"
+	containerapi "github.com/moby/moby/api/types/container"
 	"github.com/shoenig/test/must"
 )
 
