@@ -7,7 +7,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/hashicorp/nomad/helper/resolvconf"
+	"github.com/hashicorp/nomad/lib/resolvconf"
 	"github.com/hashicorp/nomad/plugins/drivers"
 	"github.com/hashicorp/nomad/plugins/drivers/fsisolation"
 	"github.com/shoenig/test/must"

@@ -8,7 +8,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/hashicorp/nomad/helper/resolvconf"
+	"github.com/hashicorp/nomad/lib/resolvconf"
 	"github.com/hashicorp/nomad/plugins/drivers"
 )
 

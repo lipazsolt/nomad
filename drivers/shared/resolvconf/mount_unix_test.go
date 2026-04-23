@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/hashicorp/nomad/helper/resolvconf"
+	"github.com/hashicorp/nomad/lib/resolvconf"
 	"github.com/shoenig/test/must"
 )
 
