@@ -40,7 +40,6 @@ rules:
             - pattern-not: "helper/pluginutils/grpcutils..."
             - pattern-not: "helper/pluginutils/hclspecutils..."
             - pattern-not: "helper/pointer..."
-            - pattern-not: "helper/resolvconf..."
             - pattern-not: "helper/testlog..."
             - pattern-not: "helper/uuid..."
             - pattern-not: "jobspec..."
