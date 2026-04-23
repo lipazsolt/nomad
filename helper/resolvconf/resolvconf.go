@@ -1,5 +1,5 @@
 // Copyright IBM Corp. 2015, 2025
-// SPDX-License-Identifier: BUSL-1.1
+// SPDX-License-Identifier: MPL-2.0
 
 // Package resolvconf provides small helpers for reading, parsing, and writing
 // resolv.conf files.
