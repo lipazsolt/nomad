@@ -145,13 +145,16 @@ func Test_taskHandle_collectDockerStats(t *testing.T) {
 	must.NoError(t, err)
 	must.NotNil(t, dockerStats)
 
-	// Ensure all the stats we use for calculating CPU percentages within
-	// DockerStatsToTaskResourceUsage are present and non-zero.
+	// Ensure the current sample has the CPU stats we use for calculating CPU
+	// percentages within DockerStatsToTaskResourceUsage.
+	//
+	// We intentionally do not assert on PreCPUStats here. This test performs a
+	// single stats collection, and Docker may return a first sample with the
+	// "previous" CPU snapshot zeroed because there is no earlier sample yet.
+	// That behavior is valid and does not indicate a regression in stats
+	// collection.
 	must.NonZero(t, dockerStats.CPUStats.CPUUsage.TotalUsage)
 	must.NonZero(t, dockerStats.CPUStats.CPUUsage.TotalUsage)
-
-	must.NonZero(t, dockerStats.PreCPUStats.CPUUsage.TotalUsage)
-	must.NonZero(t, dockerStats.PreCPUStats.CPUUsage.TotalUsage)
 
 	// System usage is only populated on Linux machines. GitHub Actions Windows
 	// runners do not have UsageInKernelmode or UsageInUsermode populated and
@@ -161,10 +164,6 @@ func Test_taskHandle_collectDockerStats(t *testing.T) {
 		must.NonZero(t, dockerStats.CPUStats.SystemUsage)
 		must.NonZero(t, dockerStats.CPUStats.CPUUsage.UsageInKernelmode)
 		must.NonZero(t, dockerStats.CPUStats.CPUUsage.UsageInUsermode)
-
-		must.NonZero(t, dockerStats.PreCPUStats.SystemUsage)
-		must.NonZero(t, dockerStats.PreCPUStats.CPUUsage.UsageInKernelmode)
-		must.NonZero(t, dockerStats.PreCPUStats.CPUUsage.UsageInUsermode)
 
 		must.NonZero(t, dockerStats.MemoryStats.Usage)
 		must.MapContainsKey(t, dockerStats.MemoryStats.Stats, "file_mapped")

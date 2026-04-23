@@ -1399,14 +1399,13 @@ func (d *Driver) createContainerConfig(task *drivers.TaskConfig, driverConfig *T
 		parsedPort := networkapi.MustParsePort(string(port))
 		convertedBindings := make([]networkapi.PortBinding, len(bindings))
 		for i, binding := range bindings {
-			var hostIP netip.Addr
-			if binding.HostIP != "" {
-				hostIP = netip.MustParseAddr(binding.HostIP)
-			}
-			convertedBindings[i] = networkapi.PortBinding{
-				HostIP:   hostIP,
+			convertedBinding := networkapi.PortBinding{
 				HostPort: binding.HostPort,
 			}
+			if binding.HostIP != "" {
+				convertedBinding.HostIP = netip.MustParseAddr(binding.HostIP)
+			}
+			convertedBindings[i] = convertedBinding
 		}
 		hostConfig.PortBindings[parsedPort] = convertedBindings
 	}

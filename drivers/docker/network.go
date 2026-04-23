@@ -43,12 +43,12 @@ func (d *Driver) CreateNetwork(allocID string, createSpec *drivers.NetworkCreate
 		return nil, false, err
 	}
 
-	specFromContainer := func(net *container.NetworkSettings, hostname string) *drivers.NetworkIsolationSpec {
+	specFromContainer := func(id string, net *container.NetworkSettings, hostname string) *drivers.NetworkIsolationSpec {
 		spec := &drivers.NetworkIsolationSpec{
 			Mode: drivers.NetIsolationModeGroup,
 			Path: net.SandboxKey,
 			Labels: map[string]string{
-				dockerNetSpecLabelKey: net.SandboxID,
+				dockerNetSpecLabelKey: id,
 			},
 		}
 
@@ -68,7 +68,7 @@ func (d *Driver) CreateNetwork(allocID string, createSpec *drivers.NetworkCreate
 		return nil, false, err
 	}
 	if container != nil && container.Container.State.Running {
-		return specFromContainer(container.Container.NetworkSettings, createSpec.Hostname), false, nil
+		return specFromContainer(container.Container.ID, container.Container.NetworkSettings, createSpec.Hostname), false, nil
 	}
 
 	container, err = d.createContainer(dockerClient, *config, d.config.InfraImage)
@@ -90,7 +90,7 @@ func (d *Driver) CreateNetwork(allocID string, createSpec *drivers.NetworkCreate
 	// keep track of this pause container for reconciliation
 	d.pauseContainers.add(container.Container.ID)
 
-	return specFromContainer(container.Container.NetworkSettings, createSpec.Hostname), true, nil
+	return specFromContainer(container.Container.ID, container.Container.NetworkSettings, createSpec.Hostname), true, nil
 }
 
 func (d *Driver) DestroyNetwork(allocID string, spec *drivers.NetworkIsolationSpec) error {

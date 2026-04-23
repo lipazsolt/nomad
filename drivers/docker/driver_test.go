@@ -1879,8 +1879,12 @@ func TestDockerDriver_PortsNoMap(t *testing.T) {
 	for port, bindings := range container.Container.HostConfig.PortBindings {
 		converted := make([]nat.PortBinding, len(bindings))
 		for i, binding := range bindings {
+			hostIP := ""
+			if binding.HostIP.IsValid() {
+				hostIP = binding.HostIP.String()
+			}
 			converted[i] = nat.PortBinding{
-				HostIP:   binding.HostIP.String(),
+				HostIP:   hostIP,
 				HostPort: binding.HostPort,
 			}
 		}
@@ -1945,8 +1949,12 @@ func TestDockerDriver_PortsMapping(t *testing.T) {
 	for port, bindings := range container.Container.HostConfig.PortBindings {
 		converted := make([]nat.PortBinding, len(bindings))
 		for i, binding := range bindings {
+			hostIP := ""
+			if binding.HostIP.IsValid() {
+				hostIP = binding.HostIP.String()
+			}
 			converted[i] = nat.PortBinding{
-				HostIP:   binding.HostIP.String(),
+				HostIP:   hostIP,
 				HostPort: binding.HostPort,
 			}
 		}
@@ -1999,8 +2007,12 @@ func TestDockerDriver_CreateContainerConfig_Ports(t *testing.T) {
 	for port, bindings := range c.Host.PortBindings {
 		converted := make([]nat.PortBinding, len(bindings))
 		for i, binding := range bindings {
+			hostIP := ""
+			if binding.HostIP.IsValid() {
+				hostIP = binding.HostIP.String()
+			}
 			converted[i] = nat.PortBinding{
-				HostIP:   binding.HostIP.String(),
+				HostIP:   hostIP,
 				HostPort: binding.HostPort,
 			}
 		}
@@ -2045,8 +2057,12 @@ func TestDockerDriver_CreateContainerConfig_PortsMapping(t *testing.T) {
 	for port, bindings := range c.Host.PortBindings {
 		converted := make([]nat.PortBinding, len(bindings))
 		for i, binding := range bindings {
+			hostIP := ""
+			if binding.HostIP.IsValid() {
+				hostIP = binding.HostIP.String()
+			}
 			converted[i] = nat.PortBinding{
-				HostIP:   binding.HostIP.String(),
+				HostIP:   hostIP,
 				HostPort: binding.HostPort,
 			}
 		}
