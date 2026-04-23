@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/docker/docker/libnetwork/resolvconf"
 	"github.com/hashicorp/nomad/plugins/drivers"
+	"github.com/moby/moby/v2/libnetwork/resolvconf"
 	"github.com/shoenig/test/must"
 )
 
