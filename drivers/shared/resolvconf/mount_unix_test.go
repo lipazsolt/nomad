@@ -10,7 +10,7 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/docker/docker/libnetwork/resolvconf"
+	"github.com/hashicorp/nomad/helper/resolvconf"
 	"github.com/shoenig/test/must"
 )
 
