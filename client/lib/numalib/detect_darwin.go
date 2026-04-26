@@ -49,6 +49,11 @@ func (m *MacOS) scanAppleSilicon(top *Topology) {
 	eCoreCount := m1cpu.ECoreCount()
 	eCoreSpeed := hw.KHz(m1cpu.ECoreHz() / 1000)
 
+    // ECoreCount() returns -1 on virtualized Apple Silicon (Bitrise CI / M2 Pro Virtual)
+	if eCoreCount < 0 {
+        eCoreCount = 0
+    }
+
 	top.Cores = make([]Core, pCoreCount+eCoreCount)
 	nthCore := hw.CoreID(0)
 
